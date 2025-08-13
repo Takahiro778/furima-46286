@@ -5,10 +5,6 @@ ja:
         nickname: ニックネーム
         email: メールアドレス
         password: パスワード
-        last_name: 苗字
-        first_name: 名前
-        last_name_kana: 苗字（カナ）
-        first_name_kana: 名前（カナ）
         birth_date: 生年月日
   errors:
     messages:
@@ -17,3 +13,17 @@ ja:
       invalid: "は不正な値です"
       too_short: "は%{count}文字以上で入力してください"
       confirmation: "とパスワードの入力が一致しません"
+    models:
+      user:
+        attributes:
+          last_name:
+            blank: "can't be blank"
+            invalid: "is invalid. Input full-width characters."
+          first_name:
+            blank: "can't be blank"
+            invalid: "is invalid. Input full-width characters."
+          last_name_kana:
+            blank: "can't be blank"
+            invalid: "is invalid. Input full-width katakana characters."
+          first_name_kana:
+            blank: "can't be blank"
