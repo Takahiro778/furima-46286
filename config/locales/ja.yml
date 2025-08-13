@@ -1,0 +1,29 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        nickname: ニックネーム
+        email: メールアドレス
+        password: パスワード
+        birth_date: 生年月日
+  errors:
+    messages:
+      blank: "を入力してください"
+      taken: "はすでに存在します"
+      invalid: "は不正な値です"
+      too_short: "は%{count}文字以上で入力してください"
+      confirmation: "とパスワードの入力が一致しません"
+    models:
+      user:
+        attributes:
+          last_name:
+            blank: "can't be blank"
+            invalid: "is invalid. Input full-width characters."
+          first_name:
+            blank: "can't be blank"
+            invalid: "is invalid. Input full-width characters."
+          last_name_kana:
+            blank: "can't be blank"
+            invalid: "is invalid. Input full-width katakana characters."
+          first_name_kana:
+            blank: "can't be blank"
