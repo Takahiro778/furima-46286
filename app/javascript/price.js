@@ -1,5 +1,5 @@
 // 販売価格の手数料・利益を表示
-const setupPriceCalc = () => {
+const price = () => {
   const priceInput = document.getElementById("item-price");
   const feeEl = document.getElementById("add-tax-price");
   const profitEl = document.getElementById("profit");
@@ -22,5 +22,5 @@ const setupPriceCalc = () => {
 };
 
 // Turbo / 非Turbo 両対応
-document.addEventListener("turbo:load", setupPriceCalc);
-document.addEventListener("DOMContentLoaded", setupPriceCalc);
+window.addEventListener("turbo:load", price);
+window.addEventListener("turbo:render", price);
