@@ -1,26 +1,38 @@
 .second-fotter {
   width: 100%;
   min-width: 800px;
-  height: 200px;
+  /* height: 200px; ← 余白の原因なので削除 */
   background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
+  align-items: center;       /* 中央寄せ */
+  padding: 16px 0 20px;      /* 自然な上下余白に */
 }
 
 .second-fotter-text-wrap {
-  margin: 30px 0;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 28px;                 /* 項目の間隔（見本の配置感覚） */
+  margin: 10px 0 8px;
 }
 
 .second-fotter-text {
   color: #333;
   font-size: 12px;
-  margin: 0 10px;
+  text-decoration: none;
 }
+.second-fotter-text:hover { text-decoration: underline; }
 
 .second-fotter-logo {
   width: 185px;
-  height: 49px;
-  margin: 0 auto;
+  height: auto;              /* 比率維持で綺麗に */
+  display: block;
+  margin: 6px auto 0;
+}
+
+.second-fotter-copy {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #333;
 }
