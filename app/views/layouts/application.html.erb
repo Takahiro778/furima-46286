@@ -10,8 +10,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <!-- コンテンツ表示 -->
-    <%= yield %>
-  </body>
+<body>
+  <!-- コンテンツ表示 -->
+  <%= yield %>
+
+  <!-- フッター -->
+  <%= render 'shared/second-footer' %>
+</body>
 </html>

@@ -1,12 +1,9 @@
-<%# このパーシャルは、渡された`model`オブジェクトにエラーがある場合のみ表示されます %>
 <% if model.errors.any? %>
-  <div class='error-alert'>
+  <div class="error-alert">
     <ul>
-      <%# エラーメッセージを一つずつ取り出して、liタグとして表示します %>
-      <% model.errors.full_messages.each do |message| %>
-        <li class='error-message'><%= message %></li>
+      <% model.errors.full_messages.each do |msg| %>
+        <li class="error-message"><%= msg %></li>
       <% end %>
     </ul>
   </div>
 <% end %>
-
