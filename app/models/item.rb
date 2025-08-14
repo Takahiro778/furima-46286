@@ -1,4 +1,3 @@
-# app/models/item.rb
 class Item < ApplicationRecord
   belongs_to :user
   has_one_attached :image
@@ -10,15 +9,19 @@ class Item < ApplicationRecord
   belongs_to :prefecture
   belongs_to :scheduled_delivery
 
-  with_options presence: true do
-    validates :name, :info, :image
-  end
+  # --- エラーメッセージの表示順を固定 ---
+  validates :image, presence: true              # 1
+  validates :name,  presence: true              # 2
+  validates :info,  presence: true              # 3
 
-  with_options numericality: { other_than: 1, message: "can't be blank" } do
-    validates :category_id, :sales_status_id, :shipping_fee_status_id, :prefecture_id, :scheduled_delivery_id
-  end
+  validates :price, presence: true              # 4
+  validates :price, numericality: { only_integer: true,
+                                    greater_than_or_equal_to: 300,
+                                    less_than_or_equal_to: 9_999_999 } # 5
 
-  validates :price,
-    presence: true,
-    numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
+  validates :category_id,            numericality: { other_than: 1, message: "can't be blank" } # 6
+  validates :sales_status_id,        numericality: { other_than: 1, message: "can't be blank" } # 7
+  validates :shipping_fee_status_id, numericality: { other_than: 1, message: "can't be blank" } # 8
+  validates :prefecture_id,          numericality: { other_than: 1, message: "can't be blank" } # 9
+  validates :scheduled_delivery_id,  numericality: { other_than: 1, message: "can't be blank" } # 10
 end
