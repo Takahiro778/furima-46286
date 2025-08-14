@@ -1,9 +1,8 @@
-# app/controllers/items_controller.rb
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
+  before_action :authenticate_user!, except: [:index, :show]
 
   def index
-    @items = Item.order(created_at: :desc)
+    # @items = Item.order(created_at: :desc) # 一覧機能の実装時にコメントを解除します
   end
 
   def new
@@ -13,24 +12,20 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     if @item.save
-      redirect_to root_path, notice: '商品を出品しました。'
+      redirect_to root_path
     else
-      flash.now[:alert] = '入力内容を確認してください。'
       render :new, status: :unprocessable_entity
     end
   end
 
-  def show
-    @item = Item.find(params[:id])
-  end
+  # def show
+  #   # @item = Item.find(params[:id]) # 詳細機能の実装時にコメントを解除します
+  # end
 
   private
 
-  # README準拠のカラム＋画像（ActiveStorage）
   def item_params
-    params.require(:item).permit(
-      :name, :info, :category_id, :sales_status_id, :shipping_fee_status_id,
-      :prefecture_id, :scheduled_delivery_id, :price, :image
-    ).merge(user_id: current_user.id)
+    params.require(:item).permit(:image, :name, :info, :category_id, :sales_status_id, :shipping_fee_status_id, :prefecture_id, :scheduled_delivery_id, :price).merge(user_id: current_user.id)
   end
 end
+
