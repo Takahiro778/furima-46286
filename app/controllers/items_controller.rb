@@ -19,15 +19,15 @@ class ItemsController < ApplicationController
     end
   end
 
-  # def show   ← 商品詳細機能の実装時に使用
-  #   set_item
-  # end
+  def show
+    # 表示専用。ロジックは持たない
+  end
 
   private
 
-  # def set_item
-  #   @item = Item.find(params[:id])
-  # end
+  def set_item
+    @item = Item.find(params[:id])
+  end
 
   def item_params
     params.require(:item).permit(
