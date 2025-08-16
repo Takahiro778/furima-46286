@@ -131,7 +131,7 @@
       <% if @items.present? %>
         <% @items.each do |item| %>
           <li class='list'>
-            <%= link_to item_path(item) do %>
+            <a href="#">
               <div class='item-img-content'>
                 <%# 画像があれば表示、なければサンプル画像 %>
                 <% if item.image.attached? %>
