@@ -7,11 +7,11 @@
 #
 # For more information, see https://rubydoc.info/gems/rspec-rails/RSpec/Rails
 
-ENV["RAILS_ENV"] ||= "test"
-require File.expand_path("../config/environment", __dir__)
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
-require "rspec/rails"
+abort('The Rails environment is running in production mode!') if Rails.env.production?
+require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -39,7 +39,7 @@ end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
-    Rails.root.join("spec/fixtures")
+    Rails.root.join('spec/fixtures')
   ]
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your

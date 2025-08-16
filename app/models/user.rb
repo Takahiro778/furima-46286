@@ -12,16 +12,16 @@ class User < ApplicationRecord
 
   # ← ここを英語の message に
   validates :last_name,
-           format: { with: ZENKAKU_REGEX,  message: 'is invalid. Input full-width characters' }
+            format: { with: ZENKAKU_REGEX,  message: 'is invalid. Input full-width characters' }
   validates :first_name,
-           format: { with: ZENKAKU_REGEX,  message: 'is invalid. Input full-width characters' }
+            format: { with: ZENKAKU_REGEX,  message: 'is invalid. Input full-width characters' }
   validates :last_name_kana,
-           format: { with: KATAKANA_REGEX, message: 'is invalid. Input full-width katakana characters' }
+            format: { with: KATAKANA_REGEX, message: 'is invalid. Input full-width katakana characters' }
   validates :first_name_kana,
-           format: { with: KATAKANA_REGEX, message: 'is invalid. Input full-width katakana characters' }
+            format: { with: KATAKANA_REGEX, message: 'is invalid. Input full-width katakana characters' }
 
   validates :password,
-           format: { with: PW_COMPLEXITY,
-                     message: 'is invalid. Include both letters and numbers' },
-           if: :password_required?
+            format: { with: PW_COMPLEXITY,
+                      message: 'is invalid. Include both letters and numbers' },
+            if: :password_required?
 end

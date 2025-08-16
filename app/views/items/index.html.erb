@@ -123,64 +123,69 @@
   <%# 商品一覧 %>
   <div class='item-contents'>
     <h2 class='title'>ピックアップカテゴリー</h2>
-    <div class="subtitle" >
+    <div class="subtitle">
       新規投稿商品
     </div>
+
     <ul class='item-lists'>
+      <% if @items.present? %>
+        <% @items.each do |item| %>
+          <li class='list'>
+            <a href="#">
+              <div class='item-img-content'>
+                <%# 画像があれば表示、なければサンプル画像 %>
+                <% if item.image.attached? %>
+                  <%= image_tag item.image, class: "item-img" %>
+                <% else %>
+                  <%= image_tag "item-sample.png", class: "item-img", alt: "no image" %>
+                <% end %>
 
-      <%# 商品のインスタンス変数になにか入っている場合、中身のすべてを展開できるようにしましょう %>
-      <li class='list'>
-        <%= link_to "#" do %>
-        <div class='item-img-content'>
-          <%= image_tag "item-sample.png", class: "item-img" %>
+                <%# 購入機能実装後：売却済みならバッジ表示（今はコメントのまま残す） %>
+                <%# if item.sold_out? %>
+                <%#   <div class='sold-out'><span>Sold Out!!</span></div> %>
+                <%# end %>
+              </div>
 
-          <%# 商品が売れていればsold outを表示しましょう %>
-          <div class='sold-out'>
-            <span>Sold Out!!</span>
-          </div>
-          <%# //商品が売れていればsold outを表示しましょう %>
-
-        </div>
-        <div class='item-info'>
-          <h3 class='item-name'>
-            <%= "商品名" %>
-          </h3>
-          <div class='item-price'>
-            <span><%= "販売価格" %>円<br><%= '配送料負担' %></span>
-            <div class='star-btn'>
-              <%= image_tag "star.png", class:"star-icon" %>
-              <span class='star-count'>0</span>
-            </div>
-          </div>
-        </div>
+              <div class='item-info'>
+                <h3 class='item-name'><%= item.name %></h3>
+                <div class='item-price'>
+                  <span>
+                    <%= number_to_currency(item.price, unit: "¥", precision: 0) %><br>
+                    <%= item.shipping_fee_status&.name || "配送料未設定" %>
+                  </span>
+                  <div class='star-btn'>
+                    <%= image_tag "star.png", class:"star-icon" %>
+                    <span class='star-count'>0</span>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </li>
         <% end %>
-      </li>
-      <%# //商品のインスタンス変数になにか入っている場合、中身のすべてを展開できるようにしましょう %>
-
-      <%# 商品がない場合は以下のダミー商品が表示されるようにしましょう %>
-      <%# 商品がある場合は表示されないようにしましょう %>
-      <li class='list'>
-        <%= link_to '#' do %>
-        <%= image_tag "https://tech-master.s3.amazonaws.com/uploads/curriculums/images/Rails1-4/sample.jpg", class: "item-img" %>
-        <div class='item-info'>
-          <h3 class='item-name'>
-            商品を出品してね！
-          </h3>
-          <div class='item-price'>
-            <span>99999999円<br>(税込み)</span>
-            <div class='star-btn'>
-              <%= image_tag "star.png", class:"star-icon" %>
-              <span class='star-count'>0</span>
+      <% else %>
+        <%# 商品がない場合のダミー表示 %>
+        <li class='list'>
+          <%= link_to '#' do %>
+            <div class='item-img-content'>
+              <%= image_tag "https://tech-master.s3.amazonaws.com/uploads/curriculums/images/Rails1-4/sample.jpg", class: "item-img" %>
             </div>
-          </div>
-        </div>
-        <% end %>
-      </li>
-      <%# //商品がある場合は表示されないようにしましょう %>
-      <%# //商品がない場合は以下のダミー商品が表示されるようにしましょう %>
+            <div class='item-info'>
+              <h3 class='item-name'>商品を出品してね！</h3>
+              <div class='item-price'>
+                <span>99999999円<br>(税込み)</span>
+                <div class='star-btn'>
+                  <%= image_tag "star.png", class:"star-icon" %>
+                  <span class='star-count'>0</span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
     </ul>
   </div>
   <%# /商品一覧 %>
+
 </div>
 <%= link_to(new_item_path, class: 'purchase-btn') do %>
   <span class='purchase-btn-text'>出品する</span>
