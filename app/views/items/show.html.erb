@@ -18,6 +18,17 @@
       </span>
     </div>
 
+    <%# ▼ アクションボタン（見本と同じ：ラッパー無し・縦並び） %>
+<% if user_signed_in? %>
+  <% if current_user == @item.user %>
+    <%= link_to "商品の編集", "#", class: "item-red-btn" %>
+    <p class="or-text">or</p>
+    <%= link_to "削除", "#", class: "item-destroy" %>
+  <% else %>
+    <%= link_to "購入画面に進む", "#", class: "item-red-btn" %>
+  <% end %>
+<% end %>
+
     <div class="item-explain-box">
       <%= simple_format(@item.info) %>
     </div>
