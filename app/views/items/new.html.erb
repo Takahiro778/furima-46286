@@ -1,8 +1,4 @@
 <div class="items-sell-contents">
-  <header class="items-sell-header">
-    <%= link_to image_tag('furima-logo-color.png', size: '185x50'), root_path %>
-  </header>
-
   <div class="items-sell-main">
     <h2 class="items-sell-title">商品の情報を入力</h2>
 
@@ -138,4 +134,9 @@
       </div>
     <% end %>
   </div>
-</div> 
+</div>
+
+<%# 出品ページは second-footer を表示する %>
+<% content_for :footer do %>
+  <%= render "shared/second-footer" %>
+<% end %>

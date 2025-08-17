@@ -11,13 +11,23 @@
   </head>
 
   <body>
-    <!-- ヘッダー（全ページで1回だけ描画） -->
-    <%= render "shared/header" %>
+    <%# --- ヘッダー --- %>
+    <% if content_for?(:header) %>
+      <%= yield :header %>
+    <% elsif controller_name == "items" && action_name == "new" %>
+      <%= render "shared/second-header" %> <%# ← new だけセカンドヘッダー %>
+    <% else %>
+      <%= render "shared/header" %>
+    <% end %>
 
-    <!-- コンテンツ -->
+    <%# --- コンテンツ本体 --- %>
     <%= yield %>
 
-    <!-- フッター（全ページで1回だけ描画） -->
-    <%= render "shared/footer" %>
+    <%# --- フッター --- %>
+    <% if content_for?(:footer) %>
+      <%= yield :footer %>           <%# ページ側が指定したらそれを使う %>
+    <% else %>
+      <%= render "shared/footer" %>  <%# それ以外は通常フッター %>
+    <% end %>
   </body>
 </html>
