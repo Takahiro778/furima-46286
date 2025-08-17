@@ -10,11 +10,14 @@
     <%= javascript_importmap_tags %>
   </head>
 
-<body>
-  <!-- コンテンツ表示 -->
-  <%= yield %>
+  <body>
+    <!-- ヘッダー（全ページで1回だけ描画） -->
+    <%= render "shared/header" %>
 
-  <!-- フッター -->
-  <%= render 'shared/second-footer' %>
-</body>
+    <!-- コンテンツ -->
+    <%= yield %>
+
+    <!-- フッター（全ページで1回だけ描画） -->
+    <%= render "shared/footer" %>
+  </body>
 </html>

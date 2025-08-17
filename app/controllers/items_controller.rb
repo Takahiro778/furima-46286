@@ -1,8 +1,10 @@
 class ItemsController < ApplicationController
+  # 一覧・詳細は非ログインでも閲覧可
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_item, only: :show
 
   def index
+    # 新着順 + 画像のN+1回避
     @items = Item.includes(image_attachment: :blob).order(created_at: :desc)
   end
 
@@ -20,13 +22,14 @@ class ItemsController < ApplicationController
   end
 
   def show
-    # 表示専用。ロジックは持たない
+    # 表示専用（ロジックは持たない）
   end
 
   private
 
   def set_item
-    @item = Item.find(params[:id])
+    # 画像を事前読込しておく（ActiveStorageのN+1回避 & 画像表示の安定化）
+    @item = Item.with_attached_image.find(params[:id])
   end
 
   def item_params
