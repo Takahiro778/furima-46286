@@ -1,12 +1,16 @@
+/* 浮遊ボタン（右下） */
 .purchase-btn {
-  width: 120px;
-  background: #3ccace;
-  text-align: center;
-  border-radius: 4%;
-  bottom: 32px;
-  right: 32px;
   position: fixed;
+  right: 32px;
+  bottom: 32px;
+  width: 120px;
   padding: 15px;
+  background: #3ccace;
+  border-radius: 4%;
+  text-align: center;
+  text-decoration: none;   /* リンク下線を消す */
+  z-index: 1000;           /* フッター等に隠れないように */
+  display: block;          /* 幅を確実に持たせる */
 }
 
 .purchase-btn-text {
@@ -17,6 +21,17 @@
   margin-bottom: 5px;
 }
 
+/* 画像は横幅の60%で中央寄せ */
 .purchase-btn-icon {
   width: 60%;
+  display: block;
+  margin: 0 auto;
+}
+
+/* グローバルな a{} が上書きしても負けないように */
+.purchase-btn:hover,
+.purchase-btn:visited,
+.purchase-btn:active {
+  color: #fff;
+  text-decoration: none;
 }
