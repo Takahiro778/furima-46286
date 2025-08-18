@@ -1,3 +1,5 @@
+<%= render "shared/header" %>
+
 <div class="item-show">
   <div class="item-box">
     <h2 class="name"><%= @item.name %></h2>
@@ -10,24 +12,37 @@
       <% end %>
     </div>
 
-    <div class="item-price-box">
-      <span class="item-price"><%= number_to_currency(@item.price, unit: "¥", precision: 0, format: "%u %n") %></span>
-      <span class="item-postage">
-        <%= (@item.respond_to?(:shipping_fee_status) && @item.shipping_fee_status&.name).presence ||
-            ShippingFeeStatus.find_by(id: @item.shipping_fee_status_id)&.name || "配送料未設定" %>
-      </span>
-    </div>
+<div class="item-price-box">
+  <span class="item-price"><%= number_to_currency(@item.price, unit: "¥", precision: 0, format: "%u %n") %></span>
+  <span class="item-postage">
+    <%= @item.shipping_fee_status&.name || "配送料未設定" %>
+  </span>
+</div>
 
-    <%# 出品者/他者 でボタン出し分け（編集/削除はダミーでOK） %>
-    <% if user_signed_in? %>
-      <% if current_user == @item.user %>
-        <%= link_to "商品の編集", "#", class: "item-red-btn" %>
-        <p class="or-text">or</p>
-        <%= link_to "削除", "#", class: "item-destroy" %>
-      <% else %>
-        <%= link_to "購入画面に進む", "#", class: "item-red-btn" %>
-      <% end %>
-    <% end %>
+<%# ▼ 編集 → or → 削除（出品者のみ） %>
+<% if user_signed_in? && current_user == @item.user %>
+  <%= link_to "商品の編集",
+              edit_item_path(@item),
+              class: "item-red-btn" %>
+
+  <p class="or-text">or</p>
+
+  <%= link_to "削除",
+            "#",
+            class: "item-destroy",
+            rel: "nofollow" %>
+
+  <%#<%= link_to "削除",
+              item_path(@item),
+              class: "item-destroy",
+              rel: "nofollow",
+              data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
+
+<%# ▼ ログイン済み & 他人の商品なら購入ボタン（任意の遷移先に変更可） %>
+<% elsif user_signed_in? %>
+  <%= link_to "購入画面に進む", "#", class: "item-red-btn" %>
+<% end %>
+
 
     <div class="item-explain-box">
       <%= simple_format(@item.info) %>
