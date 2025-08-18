@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_item, only: [:show, :edit, :update]
-  before_action :redirect_unless_owner!, only: [:edit, :update]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_item_owner!, only: [:edit, :update, :destroy]
 
   def index
     @items = Item.includes(image_attachment: :blob).order(created_at: :desc)
@@ -14,23 +14,29 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     if @item.save
-      redirect_to item_path(@item), notice: "出品しました"
+      redirect_to root_path, notice: "商品を出品しました。"
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  def show; end
+  def show
+  end
 
-  def edit; end
+  def edit
+  end
 
   def update
-    # 画像は未選択でも維持（何も編集しなくても画像が消えない条件に対応）
     if @item.update(item_params)
-      redirect_to item_path(@item), notice: "更新しました"
+      redirect_to @item, notice: "商品情報を更新しました。"
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @item.destroy
+    redirect_to root_path, notice: "商品を削除しました。"
   end
 
   private
@@ -39,8 +45,8 @@ class ItemsController < ApplicationController
     @item = Item.with_attached_image.find(params[:id])
   end
 
-  def redirect_unless_owner!
-    redirect_to root_path unless current_user == @item.user
+  def authorize_item_owner!
+    redirect_to root_path, alert: "権限がありません。" unless current_user == @item.user
   end
 
   def item_params
