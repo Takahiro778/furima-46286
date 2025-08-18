@@ -1,11 +1,9 @@
 class ItemsController < ApplicationController
-  # 一覧・詳細は非ログインでも閲覧可
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_item, only: [:show, :edit, :update]
-  before_action :redirect_unless_owner, only: [:edit, :update]
+  before_action :redirect_unless_owner!, only: [:edit, :update]
 
   def index
-    # 新着順 + 画像のN+1回避
     @items = Item.includes(image_attachment: :blob).order(created_at: :desc)
   end
 
@@ -16,23 +14,20 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     if @item.save
-      redirect_to root_path
+      redirect_to item_path(@item), notice: "出品しました"
     else
       render :new, status: :unprocessable_entity
     end
   end
 
-  def show
-    # 表示専用（ロジックは持たない）
-  end
+  def show; end
 
-  def edit
-    # set_item が読み込むので空でOK
-  end
+  def edit; end
 
   def update
+    # 画像は未選択でも維持（何も編集しなくても画像が消えない条件に対応）
     if @item.update(item_params)
-      redirect_to item_path(@item), notice: "商品情報を更新しました"
+      redirect_to item_path(@item), notice: "更新しました"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -41,12 +36,11 @@ class ItemsController < ApplicationController
   private
 
   def set_item
-    # 画像を事前読込しておく（ActiveStorageのN+1回避 & 画像表示の安定化）
     @item = Item.with_attached_image.find(params[:id])
   end
 
-  def redirect_unless_owner
-    redirect_to root_path, alert: "権限がありません" unless current_user == @item.user
+  def redirect_unless_owner!
+    redirect_to root_path unless current_user == @item.user
   end
 
   def item_params

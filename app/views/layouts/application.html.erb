@@ -5,23 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%# --- ヘッダー --- %>
-    <% if content_for?(:header) %>
-      <%= yield :header %>
-    <% elsif controller_name == "items" && action_name == "new" %>
-      <%= render "shared/second-header" %> <%# ← new だけセカンドヘッダー %>
-    <% else %>
-      <%= render "shared/header" %>
-    <% end %>
-
-    <%# --- コンテンツ本体 --- %>
     <%= yield %>
-
   </body>
 </html>
