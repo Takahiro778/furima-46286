@@ -23,11 +23,5 @@
     <%# --- コンテンツ本体 --- %>
     <%= yield %>
 
-    <%# --- フッター --- %>
-    <% if content_for?(:footer) %>
-      <%= yield :footer %>           <%# ページ側が指定したらそれを使う %>
-    <% else %>
-      <%= render "shared/footer" %>  <%# それ以外は通常フッター %>
-    <% end %>
   </body>
 </html>

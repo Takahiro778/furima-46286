@@ -18,16 +18,16 @@
       </span>
     </div>
 
-    <%# ▼ アクションボタン（見本と同じ：ラッパー無し・縦並び） %>
-<% if user_signed_in? %>
-  <% if current_user == @item.user %>
-    <%= link_to "商品の編集", "#", class: "item-red-btn" %>
-    <p class="or-text">or</p>
-    <%= link_to "削除", "#", class: "item-destroy" %>
-  <% else %>
-    <%= link_to "購入画面に進む", "#", class: "item-red-btn" %>
-  <% end %>
-<% end %>
+    <%# 出品者/他者 でボタン出し分け（編集/削除はダミーでOK） %>
+    <% if user_signed_in? %>
+      <% if current_user == @item.user %>
+        <%= link_to "商品の編集", "#", class: "item-red-btn" %>
+        <p class="or-text">or</p>
+        <%= link_to "削除", "#", class: "item-destroy" %>
+      <% else %>
+        <%= link_to "購入画面に進む", "#", class: "item-red-btn" %>
+      <% end %>
+    <% end %>
 
     <div class="item-explain-box">
       <%= simple_format(@item.info) %>
@@ -57,7 +57,20 @@
         相手のことを考え丁寧なコメントを心がけましょう。<br>
         不快な言葉遣いなどは利用制限や退会処分となることがあります。
       </p>
-      <button type="button" class="comment-btn"><span>コメントする</span></button>
+      <button type="button" class="comment-btn">
+        <span>コメントする</span>
+      </button>
     </form>
   </div>
+
+  <%# ▼ 復活：前後リンク & カテゴリ誘導（URLは未実装なので # のままでもOK） %>
+  <div class="links">
+    <a href="#" class="change-item-btn">＜ 前の商品</a>
+    <a href="#" class="change-item-btn">後ろの商品 ＞</a>
+  </div>
+  <a href="#" class='another-item'>
+    <%= @item.category&.name || "カテゴリー" %>をもっと見る
+  </a>
 </div>
+
+<%= render "shared/footer" %>
