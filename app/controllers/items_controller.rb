@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     if @item.save
-      redirect_to root_path, notice: "商品を出品しました。"
+      redirect_to root_path, notice: '商品を出品しました。'
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class ItemsController < ApplicationController
 
   def update
     if @item.update(item_params)
-      redirect_to @item, notice: "商品情報を更新しました。"
+      redirect_to @item, notice: '商品情報を更新しました。'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item.destroy
-    redirect_to root_path, notice: "商品を削除しました。"
+    redirect_to root_path, notice: '商品を削除しました。'
   end
 
   private
@@ -46,7 +46,7 @@ class ItemsController < ApplicationController
   end
 
   def authorize_item_owner!
-    redirect_to root_path, alert: "権限がありません。" unless current_user == @item.user
+    redirect_to root_path, alert: '権限がありません。' unless current_user == @item.user
   end
 
   def item_params
