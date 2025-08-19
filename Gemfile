@@ -68,9 +68,9 @@ group :production do
   gem 'pg'
 end
 
-# group :development, :production do
-#   gem 'payjp'
-# end
+group :development, :production do
+  gem 'payjp'
+end
 
 gem 'devise'
 gem 'active_hash'
