@@ -1,7 +1,9 @@
 <%= render "shared/second-header" %>
 
 <!-- Pay.jp（カード入力UI用）-->
-<script type="text/javascript" src="https://js.pay.jp/v2/pay.js"></script>
+<script src="https://js.pay.jp/v2/pay.js"></script>
+<meta name="payjp-public-key" content="<%= ENV['PAYJP_PUBLIC_KEY'] %>">
+
 
 <div class="transaction-contents">
   <div class="transaction-main">
@@ -43,11 +45,11 @@
 
     <%# --- 購入フォーム --- %>
     <%= form_with model: @order_shipping_address,
-                  url: item_orders_path(@item),
-                  id: "charge-form",
-                  class: "transaction-form-wrap",
-                  local: true,
-                  data: { public_key: ENV["PAYJP_PUBLIC_KEY"], turbo: false } do |f| %>
+              url: item_orders_path(@item),
+              id: "charge-form",
+              class: "transaction-form-wrap",
+              local: true,
+              data: { turbo: false } do |f| %>
 
       <%# カード情報 %>
       <div class="credit-card-form">

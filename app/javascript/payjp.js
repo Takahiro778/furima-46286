@@ -1,59 +1,61 @@
 // app/javascript/payjp.js
-const setupPayjp = () => {
-  const form = document.getElementById('charge-form');
-  if (!form) return;
+// Pay.jp v2 Elements を #number-form / #expiry-form / #cvc-form にマウントし、
+// トークンを hidden に入れて submit する
 
-  // ビューから公開鍵を取得（data-public-key）
-  const publicKey = form.dataset.publicKey;
+const setupPayjp = () => {
+  const form = document.getElementById("charge-form");
+  if (!form) return; // このページ以外では何もしない
+
+  // 1) 公開鍵を meta から取得
+  const meta = document.querySelector('meta[name="payjp-public-key"]');
+  const publicKey = meta && meta.content;
   if (!publicKey) {
-    console.error('[PAYJP] 公開鍵が見つかりません');
+    console.warn("[PAYJP] public keyが見つかりません（meta[name=payjp-public-key]）");
     return;
   }
 
-  // PAY.JP 初期化
+  // 2) Payjp & Elements 初期化
+  if (!window.Payjp) {
+    console.error("[PAYJP] pay.js が読み込まれていません（CDNタグを確認）");
+    return;
+  }
   const payjp = Payjp(publicKey);
   const elements = payjp.elements();
 
-  // Elements を作成して指定のDIVにマウント
-  const numberElement = elements.create('cardNumber');
-  const expiryElement = elements.create('cardExpiry');
-  const cvcElement    = elements.create('cardCvc');
+  const numberElement = elements.create("cardNumber");
+  const expiryElement = elements.create("cardExpiry");
+  const cvcElement    = elements.create("cardCvc");
 
-  numberElement.mount('#number-form');
-  expiryElement.mount('#expiry-form');
-  cvcElement.mount('#cvc-form');
+  // 3) 指定のIDにマウント（IDが違うと何も表示されません）
+  numberElement.mount("#number-form");
+  expiryElement.mount("#expiry-form");
+  cvcElement.mount("#cvc-form");
 
-  // 送信時の処理
-  form.addEventListener('submit', async (e) => {
-    // Turbo対策で二重送信されやすいのでまず止める
+  // 4) 送信時にトークン化して hidden に詰めて submit
+  form.addEventListener("submit", async (e) => {
+    // Elementsの値が未検証なので、とりあえず生成を試みる
     e.preventDefault();
 
-    // トークン生成
-    const { error, id: token } = await payjp.createToken(numberElement);
-
+    const { token, error } = await payjp.createToken(numberElement);
     if (error) {
-      console.error('[PAYJP] token error:', error);
-      alert('カード情報に不備があります。再入力してください。');
+      console.error("[PAYJP] createToken error:", error);
+      alert("カード情報が正しくありません。内容をご確認ください。");
       return;
     }
 
-    // hidden input を差し込む（Formオブジェクトの名前に合わせる）
-    const tokenInput = document.createElement('input');
-    tokenInput.setAttribute('type', 'hidden');
-    tokenInput.setAttribute('name', 'order_shipping_address[token]');
-    tokenInput.setAttribute('value', token);
-    form.appendChild(tokenInput);
+    // hidden にトークンをセット
+    const hidden = document.getElementById("card-token");
+    if (hidden) hidden.value = token.id;
 
-    // カード入力欄は空に
+    // カード入力欄はクリアしてから submit
     numberElement.clear();
     expiryElement.clear();
     cvcElement.clear();
 
-    // ここで初めて送信
     form.submit();
   });
 };
 
-// Turbo環境下でも発火するように
-window.addEventListener('turbo:load', setupPayjp);
-window.addEventListener('DOMContentLoaded', setupPayjp);
+// Turbo環境でも動くように
+window.addEventListener("turbo:load", setupPayjp);
+window.addEventListener("DOMContentLoaded", setupPayjp);
