@@ -12,9 +12,7 @@ class OrdersController < ApplicationController
     if @order_shipping_address.valid?
       begin
         pay_item
-        ApplicationRecord.transaction do
-          @order_shipping_address.save
-        end
+        ApplicationRecord.transaction { @order_shipping_address.save }
         redirect_to root_path, notice: '購入が完了しました'
       rescue => e
         Rails.logger.error("[PAYJP] charge failed: #{e.class} #{e.message}")
@@ -42,22 +40,13 @@ class OrdersController < ApplicationController
     ).merge(user_id: current_user.id, item_id: @item.id)
   end
 
-def pay_item
-  # 環境変数から秘密鍵を読み込む
-  Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+  # PAY.JP 課金処理
+  def pay_item
+    secret = ENV['PAYJP_SECRET_KEY']
+    token  = params.dig(:order_shipping_address, :token) || order_params[:token]
 
-  # フォームから送信されたカード情報（トークン）
-  token = params[:order_shipping_address][:token]
-
-  # 本番ならエラーハンドリングを入れると安心
-  Payjp::Charge.create(
-    amount: @item.price, # 商品価格
-    card: token,         # フロントから送られてきたトークン
-    currency: 'jpy'      # 通貨は日本円
-  )
-end
-
-    unless secret.present?
+    # 学習用に秘密鍵が無い場合は課金スキップ
+    if secret.blank?
       Rails.logger.info('[PAYJP] SECRETキー未設定のため決済をスキップ（学習モード）')
       return true
     end
@@ -66,7 +55,8 @@ end
     begin
       require 'payjp'
     rescue LoadError
-      raise 'payjp gem not loaded. Please add gem and bundle install.'
+      # gem をコメントアウトしている環境でも原因が分かるように明示
+      raise 'payjp gem not loaded. Please add gem "payjp" and run bundle install.'
     end
 
     Payjp.api_key = secret
