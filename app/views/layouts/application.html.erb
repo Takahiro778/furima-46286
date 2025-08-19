@@ -12,6 +12,8 @@
     <meta name="payjp-public-key" content="<%= ENV['PAYJP_PUBLIC_KEY'] %>">
   </head>
 
+  <%= javascript_include_tag "payjp", "data-turbo-track": "reload" %>
+
   <body>
     <%= yield %>
   </body>
