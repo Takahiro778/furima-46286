@@ -42,9 +42,20 @@ class OrdersController < ApplicationController
     ).merge(user_id: current_user.id, item_id: @item.id)
   end
 
-  def pay_item
-    secret = ENV['PAYJP_SECRET_KEY']
-    token  = params.dig(:order_shipping_address, :token)
+def pay_item
+  # 環境変数から秘密鍵を読み込む
+  Payjp.api_key = ENV["PAYJP_SECRET_KEY"]
+
+  # フォームから送信されたカード情報（トークン）
+  token = params[:order_shipping_address][:token]
+
+  # 本番ならエラーハンドリングを入れると安心
+  Payjp::Charge.create(
+    amount: @item.price, # 商品価格
+    card: token,         # フロントから送られてきたトークン
+    currency: 'jpy'      # 通貨は日本円
+  )
+end
 
     unless secret.present?
       Rails.logger.info('[PAYJP] SECRETキー未設定のため決済をスキップ（学習モード）')

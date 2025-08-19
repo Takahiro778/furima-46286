@@ -1,6 +1,6 @@
 <%= render "shared/second-header" %>
 
-<!-- Pay.jp（カード入力UI用／あとでJS側で使用）-->
+<!-- Pay.jp（カード入力UI用）-->
 <script type="text/javascript" src="https://js.pay.jp/v2/pay.js"></script>
 
 <div class="transaction-contents">
@@ -46,7 +46,8 @@
                   url: item_orders_path(@item),
                   id: "charge-form",
                   class: "transaction-form-wrap",
-                  local: true do |f| %>
+                  local: true,
+                  data: { public_key: ENV["PAYJP_PUBLIC_KEY"], turbo: false } do |f| %>
 
       <%# カード情報 %>
       <div class="credit-card-form">
@@ -72,7 +73,6 @@
             <label class="form-text">有効期限</label>
             <span class="indispensable">必須</span>
           </div>
-          <!-- 有効期限 -->
           <div class="input-expiration-date-wrap">
             <div id="expiry-form" class="input-default"></div>
           </div>
@@ -83,7 +83,6 @@
             <label class="form-text">セキュリティコード</label>
             <span class="indispensable">必須</span>
           </div>
-          <!-- CVC -->
           <div id="cvc-form" class="input-default"></div>
         </div>
       </div>
@@ -161,7 +160,7 @@
       </div>
 
       <%# Pay.jpトークン格納（JSで値を入れる） %>
-      <%= hidden_field_tag :token, nil, id: "card-token" %>
+      <%= f.hidden_field :token, id: "card-token" %>
 
       <div class="buy-btn">
         <%= f.submit "購入", class: "buy-red-btn", id: "button" %>
