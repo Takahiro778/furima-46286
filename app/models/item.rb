@@ -1,5 +1,6 @@
 class Item < ApplicationRecord
   belongs_to :user
+  has_one :order
   has_one_attached :image
 
   extend ActiveHash::Associations::ActiveRecordExtensions
@@ -19,9 +20,11 @@ class Item < ApplicationRecord
                                     greater_than_or_equal_to: 300,
                                     less_than_or_equal_to: 9_999_999 } # 5
 
-  validates :category_id,            numericality: { other_than: 1, message: "can't be blank" } # 6
-  validates :sales_status_id,        numericality: { other_than: 1, message: "can't be blank" } # 7
-  validates :shipping_fee_status_id, numericality: { other_than: 1, message: "can't be blank" } # 8
-  validates :prefecture_id,          numericality: { other_than: 1, message: "can't be blank" } # 9
-  validates :scheduled_delivery_id,  numericality: { other_than: 1, message: "can't be blank" } # 10
+  with_options numericality: { other_than: 1, message: "can't be blank" } do
+    validates :category_id            # 6
+    validates :sales_status_id        # 7
+    validates :shipping_fee_status_id # 8
+    validates :prefecture_id          # 9
+    validates :scheduled_delivery_id  # 10
+  end
 end
