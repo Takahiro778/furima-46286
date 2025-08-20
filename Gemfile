@@ -74,3 +74,7 @@ end
 
 gem 'devise'
 gem 'active_hash'
+
+gem 'dotenv-rails', groups: [:development, :test]
+
+gem 'gon'
