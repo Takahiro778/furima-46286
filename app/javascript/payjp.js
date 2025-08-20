@@ -8,9 +8,9 @@ const bootPayjp = () => {
   }
 
   // gon から公開鍵取得
-  const publicKey = (window.gon && (gon.payjp_public_key || gon.public_key)) || null;
+  const publicKey = window.gon && gon.payjp_public_key;
   if (!publicKey) {
-    console.warn('[PAYJP] 公開鍵が取得できません (gon.payjp_public_key / gon.public_key)');
+    console.warn('[PAYJP] 公開鍵が取得できません (gon.payjp_public_key)');
     return;
   }
 
@@ -30,8 +30,12 @@ const bootPayjp = () => {
   const cvcElement = elements.create('cardCvc');
   cvcElement.mount('#cvc-form');
 
-  // マウント済みの目印を付ける
+    // マウント済みの目印を付ける
   document.getElementById('card-number').dataset.mounted = 'true';
+
+  // イベントリスナーの二重登録を防止
+  if (form.dataset.listenerAttached) return;
+  form.dataset.listenerAttached = 'true';
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -50,9 +54,19 @@ const bootPayjp = () => {
       return;
     }
 
+     // トークンが存在しない場合のエラーハンドリングを追加
+    if (!token) {
+      console.error('[PAYJP] トークンオブジェクトが取得できませんでした。');
+      const err = document.getElementById('card-errors');
+      if (err) err.textContent = 'カード情報の取得に失敗しました。ページを再読み込みしてお試しください。';
+      submitButton.disabled = false;
+      return;
+    }
+
     // 既存のhiddenフィールドにトークンをセット
     const tokenInput = document.getElementById('card-token');
     if (!tokenInput) {
+
       console.error('Token input field #card-token not found.');
       submitButton.disabled = false;
       return;
@@ -64,5 +78,4 @@ const bootPayjp = () => {
 };
 
 // Turboでの遷移に対応（両方拾う）
-document.addEventListener('turbo:load',   bootPayjp);
-document.addEventListener('turbo:render', bootPayjp);
+document.addEventListener('turbo:load', bootPayjp);

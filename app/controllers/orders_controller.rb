@@ -10,13 +10,19 @@ class OrdersController < ApplicationController
 
   def create
     @order_shipping_address = OrderShippingAddress.new(order_shipping_address_params)
+    # フォームオブジェクトのバリデーションが通った場合のみ決済処理に進む
     if @order_shipping_address.valid?
-      pay_item
-      @order_shipping_address.save
-      redirect_to root_path
-    else
-      render :index, status: :unprocessable_entity
+      begin
+        pay_item
+        @order_shipping_address.save
+        return redirect_to root_path
+      rescue Payjp::CardError => e
+        # pay_itemでカード情報エラーが発生した場合の処理
+        @order_shipping_address.errors.add(:base, "カード情報の処理中にエラーが発生しました。入力内容をご確認ください。")
+      end
     end
+    # バリデーションエラー or 決済エラーの場合、フォームを再描画
+    render :index, status: :unprocessable_entity
   end
 
   private
