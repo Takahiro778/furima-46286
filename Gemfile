@@ -68,13 +68,10 @@ group :production do
   gem 'pg'
 end
 
-group :development, :production do
-  gem 'payjp'
-end
-
 gem 'devise'
 gem 'active_hash'
 
 gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'gon'
+gem 'payjp'
