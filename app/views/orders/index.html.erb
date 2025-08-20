@@ -33,14 +33,11 @@
 
     <!-- 購入フォーム -->
     <%= form_with model: @order_shipping_address,
+
                   url: item_orders_path(@item),
                   id: "charge-form",
                   class: 'transaction-form-wrap',
-                  local: true,
                   data: { turbo: false } do |f| %>
-
-      <!-- JSで生成するPAY.JPトークン格納用（フォームオブジェクト外） -->
-      <%= hidden_field_tag :token, '', id: 'card-token' %>
 
       <!-- クレジットカード情報 -->
       <div class="credit-card-form">
@@ -79,8 +76,8 @@
           <div id="cvc-form" class="input-default"></div>
         </div>
 
-        <!-- JSエラーメッセージ表示先 -->
-        <div id="card-errors" class="text-red-600"></div>
+         <!-- JSエラーメッセージ表示先（この実装では不要） -->
+        <div id="card-errors"></div>
       </div>
 
       <!-- 配送先 -->

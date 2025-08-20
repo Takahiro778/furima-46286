@@ -11,17 +11,16 @@ class OrdersController < ApplicationController
   def create
     @order_shipping_address = OrderShippingAddress.new(order_shipping_address_params)
 
-    unless @order_shipping_address.valid?
-      # エラー時はそのまま再描画（gonはbefore_actionでセット済）
-      return render :index, status: :unprocessable_entity
-    end
-
-    begin
-      pay_item
-      @order_shipping_address.save
-      redirect_to root_path
-    rescue Payjp::CardError
-      @order_shipping_address.errors.add(:base, "カード情報の処理中にエラーが発生しました。入力内容をご確認ください。")
+    if @order_shipping_address.valid?
+      begin
+        pay_item
+        @order_shipping_address.save
+        redirect_to root_path
+      rescue Payjp::CardError
+        @order_shipping_address.errors.add(:base, "カード情報の処理中にエラーが発生しました。入力内容をご確認ください。")
+        render :index, status: :unprocessable_entity
+      end
+    else
       render :index, status: :unprocessable_entity
     end
   end
@@ -32,7 +31,6 @@ class OrdersController < ApplicationController
     # ★ JS が const publicKey = gon.public_key を読んでいる想定に合わせる
     gon.public_key = ENV['PAYJP_PUBLIC_KEY']
   end
-
 
   def set_item
     @item = Item.find(params[:item_id])
@@ -57,6 +55,5 @@ class OrdersController < ApplicationController
       currency: 'jpy'
     )
   end
-
 
 end
