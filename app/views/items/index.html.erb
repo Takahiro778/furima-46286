@@ -92,10 +92,12 @@
                 <% else %>
                   <%= image_tag "item-sample.png", class: "item-img", alt: "no image" %>
                 <% end %>
-                <%# ▼購入機能後にON
-                <%# if item.respond_to?(:order) && item.order.present? %>
-                <%#   <div class='sold-out'><span>Sold Out!!</span></div>
-                <%# end %>
+                <%# 商品が売れている場合は「Sold Out」を表示する %>
+            <% if item.order.present? %>
+              <div class='sold-out'>
+                <span>Sold Out!!</span>
+              </div>
+            <% end %>
                 
               </div>
               <div class='item-info'>

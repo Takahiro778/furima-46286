@@ -1,3 +1,4 @@
+<%# 必要ならページ側でヘッダーを描画（レイアウトで描いているならこの1行は削除） %>
 <%= render "shared/second-header" %>
 
 <div class="transaction-contents">
@@ -27,16 +28,8 @@
       <p class="item-payment-price">¥<%= number_with_delimiter(@item.price) %></p>
     </div>
 
-    <!-- バリデーションエラー -->
-    <% if @order_shipping_address&.errors&.any? %>
-      <div class="error-alert">
-        <ul>
-          <% @order_shipping_address.errors.full_messages.each do |msg| %>
-            <li class="error-message"><%= msg %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <!-- バリデーションエラー（パーシャル） -->
+    <%= render 'shared/error_messages', model: @order_shipping_address %>
 
     <!-- 購入フォーム -->
     <%= form_with model: @order_shipping_address,
@@ -46,7 +39,7 @@
                   local: true,
                   data: { turbo: false } do |f| %>
 
-      <!-- フォームオブジェクトと関係ないトークン情報を送信するための隠しフィールド -->
+      <!-- JSで生成するPAY.JPトークン格納用（フォームオブジェクト外） -->
       <%= hidden_field_tag :token, '', id: 'card-token' %>
 
       <!-- クレジットカード情報 -->
@@ -58,7 +51,7 @@
             <label class="form-text">カード情報</label>
             <span class="indispensable">必須</span>
           </div>
-          <!-- ★ PAY.JP Elements mount -->
+          <!-- PAY.JP Elements mount -->
           <div id="card-number" class="input-default"></div>
           <div class="available-card">
             <%= image_tag "card-visa.gif",        class: "card-logo" %>
@@ -86,7 +79,7 @@
           <div id="cvc-form" class="input-default"></div>
         </div>
 
-        <!-- JSからのエラーメッセージ表示先 -->
+        <!-- JSエラーメッセージ表示先 -->
         <div id="card-errors" class="text-red-600"></div>
       </div>
 
@@ -156,4 +149,5 @@
   </div>
 </div>
 
+<%# 必要ならページ側でフッターを描画（レイアウトで描いているならこの1行は削除） %>
 <%= render "shared/second-footer" %>

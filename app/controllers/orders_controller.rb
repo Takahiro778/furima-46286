@@ -10,26 +10,29 @@ class OrdersController < ApplicationController
 
   def create
     @order_shipping_address = OrderShippingAddress.new(order_shipping_address_params)
-    # フォームオブジェクトのバリデーションが通った場合のみ決済処理に進む
-    if @order_shipping_address.valid?
-      begin
-        pay_item
-        @order_shipping_address.save
-        return redirect_to root_path
-      rescue Payjp::CardError => e
-        # pay_itemでカード情報エラーが発生した場合の処理
-        @order_shipping_address.errors.add(:base, "カード情報の処理中にエラーが発生しました。入力内容をご確認ください。")
-      end
+
+    unless @order_shipping_address.valid?
+      # エラー時はそのまま再描画（gonはbefore_actionでセット済）
+      return render :index, status: :unprocessable_entity
     end
-    # バリデーションエラー or 決済エラーの場合、フォームを再描画
-    render :index, status: :unprocessable_entity
+
+    begin
+      pay_item
+      @order_shipping_address.save
+      redirect_to root_path
+    rescue Payjp::CardError
+      @order_shipping_address.errors.add(:base, "カード情報の処理中にエラーが発生しました。入力内容をご確認ください。")
+      render :index, status: :unprocessable_entity
+    end
   end
 
   private
 
   def set_payjp_key
-    gon.payjp_public_key = ENV['PAYJP_PUBLIC_KEY']
+    # ★ JS が const publicKey = gon.public_key を読んでいる想定に合わせる
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
   end
+
 
   def set_item
     @item = Item.find(params[:item_id])
