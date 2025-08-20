@@ -5,9 +5,18 @@ const bootPayjp = () => {
   if (!form) {
     return; // フォームがなければ何もしない
   }
+  // ★ 二重実行を防止するためのフラグをチェック
+  if (form.dataset.payjpInitialized) {
+    return;
+  }
+  // ★ フラグを立てる
+  form.dataset.payjpInitialized = 'true';
+
   // gonが未定義、または公開鍵がなければ処理を中断
   if (typeof gon === 'undefined' || !gon.public_key) {
     return;
+
+
   }
 
   // 2. Pay.jpの初期化

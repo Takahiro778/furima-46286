@@ -17,6 +17,9 @@ test:
   password:
   host: localhost
   database: furima_46286_test
+  # RSpec実行時の `Mysql2::Error: This connection is in use by` エラーを回避するため、
+  # テスト環境では非同期クエリを無効にする
+  async: false
 
 production:
   <<: *default
