@@ -21,28 +21,30 @@
       </span>
     </div>
 
-    <%# ▼ 出品者は編集/削除、それ以外は購入導線 %>
+    <%# ▼ 出品者は売却前のみ 編集/削除、購入者側は売却前のみ 購入導線 %>
     <% if user_signed_in? && current_user == @item.user %>
-      <%= link_to "商品の編集", edit_item_path(@item), class: "item-red-btn" %>
-      <p class="or-text">or</p>
-      <%= link_to "削除",
-                  item_path(@item),
-                  class: "item-destroy",
-                  rel: "nofollow",
-                  data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
-<% else %>
-  <%# 売れていない場合だけボタン表示 %>
-  <% if @item.order.blank? %>
-    <% if user_signed_in? %>
-      <%= link_to "購入画面に進む",
-                  item_orders_path(@item),
-                  data: { turbo: false },
-                  class: "item-red-btn" %>
+      <% if @item.order.blank? %>
+        <%= link_to "商品の編集", edit_item_path(@item), class: "item-red-btn" %>
+        <p class="or-text">or</p>
+        <%= link_to "削除",
+                    item_path(@item),
+                    class: "item-destroy",
+                    rel: "nofollow",
+                    data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" } %>
+      <% end %>
     <% else %>
-      <%= link_to "ログインして購入へ", new_user_session_path, class: "item-red-btn" %>
+      <%# 売れていない場合だけ購入ボタン（未ログインはログイン導線） %>
+      <% if @item.order.blank? %>
+        <% if user_signed_in? %>
+          <%= link_to "購入画面に進む",
+                      item_orders_path(@item),
+                      data: { turbo: false },
+                      class: "item-red-btn" %>
+        <% else %>
+          <%= link_to "ログインして購入へ", new_user_session_path, class: "item-red-btn" %>
+        <% end %>
+      <% end %>
     <% end %>
-  <% end %>
-<% end %>
 
     <div class="item-explain-box">
       <%= simple_format(@item.info) %>
@@ -78,7 +80,6 @@
     </form>
   </div>
 
-  <%# ▼ 復活：前後リンク & カテゴリ誘導（URLは未実装なので # のままでもOK） %>
   <div class="links">
     <a href="#" class="change-item-btn">＜ 前の商品</a>
     <a href="#" class="change-item-btn">後ろの商品 ＞</a>
