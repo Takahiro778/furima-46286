@@ -1,6 +1,6 @@
 <!-- app/views/items/_form.html.erb -->
 <%= form_with model: item, local: true do |f| %>
-  <%# エラー表示 %>
+  <%# エラー %>
   <%= render "shared/error_messages", model: f.object %>
 
   <%# 商品画像 %>
@@ -39,13 +39,13 @@
       <div class="weight-bold-text">
         カテゴリー <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :category_id, Category.all, :id, :name, {},
+      <%= f.collection_select :category_id, Category.all, :id, :name, {prompt: "---"},
             { class: "select-box", id: "item-category" } %>
 
       <div class="weight-bold-text">
         商品の状態 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :sales_status_id, SalesStatus.all, :id, :name, {},
+      <%= f.collection_select :sales_status_id, SalesStatus.all, :id, :name, {prompt: "---"},
             { class: "select-box", id: "item-sales-status" } %>
     </div>
   </div>
@@ -60,19 +60,19 @@
       <div class="weight-bold-text">
         配送料の負担 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :shipping_fee_status_id, ShippingFeeStatus.all, :id, :name, {},
+      <%= f.collection_select :shipping_fee_status_id, ShippingFeeStatus.all, :id, :name, {prompt: "---"},
             { class: "select-box", id: "item-shipping-fee-status" } %>
 
       <div class="weight-bold-text">
         発送元の地域 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :prefecture_id, Prefecture.all, :id, :name, {},
+      <%= f.collection_select :prefecture_id, Prefecture.all, :id, :name, {prompt: "---"},
             { class: "select-box", id: "item-prefecture" } %>
 
       <div class="weight-bold-text">
         発送までの日数 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :scheduled_delivery_id, ScheduledDelivery.all, :id, :name, {},
+      <%= f.collection_select :scheduled_delivery_id, ScheduledDelivery.all, :id, :name, {prompt: "---"},
             { class: "select-box", id: "item-scheduled-delivery" } %>
     </div>
   </div>
