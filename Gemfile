@@ -33,7 +33,7 @@ gem "jbuilder"
 # gem "kredis"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -53,9 +53,11 @@ group :development, :test do
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+  gem 'web-console'
   gem 'rubocop', '1.71.2', require: false
+  gem 'rubocop-rails', require: false       # 任意（Rails向けCop）
+  gem 'rubocop-rspec', require: false       # 任意（RSpec向けCop）
+  gem 'rubocop-factory_bot', require: false # 任意（FactoryBot向けCop）
 end
 
 group :test do
@@ -70,3 +72,8 @@ end
 
 gem 'devise'
 gem 'active_hash'
+
+gem 'dotenv-rails', groups: [:development, :test]
+
+gem 'gon'
+gem 'payjp'

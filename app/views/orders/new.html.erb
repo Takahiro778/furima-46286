@@ -1,0 +1,50 @@
+<h2>購入画面</h2>
+
+<%= form_with model: @order_shipping_address, url: item_orders_path(@item), local: true do |f| %>
+  <!-- 郵便番号 -->
+  <div>
+    <%= f.label :postal_code, "郵便番号（ハイフン必須）" %><br>
+    <%= f.text_field :postal_code %>
+  </div>
+
+  <!-- 都道府県 -->
+  <div>
+    <%= f.label :prefecture_id, "都道府県" %><br>
+    <%= f.collection_select(:prefecture_id, Prefecture.all, :id, :name, {}, {class: "select-box"}) %>
+  </div>
+
+  <!-- 市区町村 -->
+  <div>
+    <%= f.label :city, "市区町村" %><br>
+    <%= f.text_field :city %>
+  </div>
+
+  <!-- 番地 -->
+  <div>
+    <%= f.label :addresses, "番地" %><br>
+    <%= f.text_field :addresses %>
+  </div>
+
+  <!-- 建物名 -->
+  <div>
+    <%= f.label :building, "建物名（任意）" %><br>
+    <%= f.text_field :building %>
+  </div>
+
+  <!-- 電話番号 -->
+  <div>
+    <%= f.label :phone_number, "電話番号（ハイフン不要）" %><br>
+    <%= f.text_field :phone_number %>
+  </div>
+
+  <!-- クレジットカード入力（payjp.jsの導入で改修予定） -->
+  <div id="card-token">
+    <label>クレジットカード情報</label>
+    <input type="text" placeholder="カード番号" class="card-number"><br>
+    <input type="text" placeholder="有効期限(月)" class="card-exp-month"><br>
+    <input type="text" placeholder="有効期限(年)" class="card-exp-year"><br>
+    <input type="text" placeholder="セキュリティコード" class="card-cvc"><br>
+  </div>
+
+  <%= f.submit "購入する" %>
+<% end %>

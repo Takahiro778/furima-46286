@@ -1,24 +1,20 @@
 default: &default
+  adapter: mysql2
   encoding: utf8
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: 127.0.0.1       # ソケット問題回避のためTCP接続を強制
+  username: root
+  password:
 
 development:
   <<: *default
-  adapter: mysql2
-  username: root
-  password:
-  host: localhost
   database: furima_46286_development
 
 test:
   <<: *default
-  adapter: mysql2
-  username: root
-  password:
-  host: localhost
   database: furima_46286_test
+  async: false          # “This connection is in use by …” 予防（補助的）
 
 production:
-  <<: *default
   adapter: postgresql
   url: <%= ENV['DATABASE_URL'] %>
