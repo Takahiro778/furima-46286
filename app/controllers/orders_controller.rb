@@ -28,7 +28,6 @@ class OrdersController < ApplicationController
   private
 
   def set_payjp_key
-    # ★ JS が const publicKey = gon.public_key を読んでいる想定に合わせる
     gon.public_key = ENV['PAYJP_PUBLIC_KEY']
   end
 
@@ -43,17 +42,14 @@ class OrdersController < ApplicationController
   def order_shipping_address_params
     params.require(:order_shipping_address).permit(
       :postal_code, :prefecture_id, :city, :addresses, :building, :phone_number
-    ).merge(user_id: current_user.id, item_id: @item.id, token: params[:token])
+    ).merge(user_id: current_user.id, item_id: params[:item_id], token: params[:token])
   end
 
-
   def pay_item
-    # 秘密鍵は config/initializers/payjp.rb で設定済みのため、この記述は不要
     Payjp::Charge.create(
       amount:   @item.price,
       card:     order_shipping_address_params[:token],  # Strong Parameters を通した安全なトークンを使用
       currency: 'jpy'
     )
   end
-
 end

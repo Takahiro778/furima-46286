@@ -61,4 +61,10 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # DB を同期実行にする（バックグラウンドスレッドを使わない）
+  config.active_record.async_query_executor = :inline
+  # Fiber 単位の分離をやめ、従来通り Thread 単位にする
+  config.active_support.isolation_level = :thread
+
 end

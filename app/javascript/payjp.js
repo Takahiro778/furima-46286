@@ -15,8 +15,6 @@ const bootPayjp = () => {
   // gonが未定義、または公開鍵がなければ処理を中断
   if (typeof gon === 'undefined' || !gon.public_key) {
     return;
-
-
   }
 
   // 2. Pay.jpの初期化
