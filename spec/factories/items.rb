@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :item do
-    association :user
+    user
 
     name  { 'テスト商品' }
     info  { '説明テキスト' }
@@ -15,7 +15,7 @@ FactoryBot.define do
 
     after(:build) do |item|
       item.image.attach(
-        io: File.open(Rails.root.join('spec/fixtures/files/test.png')),
+        io: Rails.root.join('spec/fixtures/files/test.png').open,
         filename: 'test.png', content_type: 'image/png'
       )
     end

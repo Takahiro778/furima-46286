@@ -53,9 +53,11 @@ group :development, :test do
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem "web-console"
+  gem 'web-console'
   gem 'rubocop', '1.71.2', require: false
+  gem 'rubocop-rails', require: false       # 任意（Rails向けCop）
+  gem 'rubocop-rspec', require: false       # 任意（RSpec向けCop）
+  gem 'rubocop-factory_bot', require: false # 任意（FactoryBot向けCop）
 end
 
 group :test do

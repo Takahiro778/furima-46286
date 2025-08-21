@@ -7,3 +7,12 @@ db/schema.rb linguist-generated
 vendor/* linguist-vendored
 config/credentials/*.yml.enc diff=rails_credentials
 config/credentials.yml.enc diff=rails_credentials
+
+# すべてのテキストファイルをLFで管理・チェックアウト
+* text=auto eol=lf
+
+# バイナリは改行変換しない（任意）
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary

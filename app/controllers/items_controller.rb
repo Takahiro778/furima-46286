@@ -7,8 +7,14 @@ class ItemsController < ApplicationController
     @items = Item.includes(image_attachment: :blob).order(created_at: :desc)
   end
 
+  def show
+  end
+
   def new
     @item = Item.new
+  end
+
+  def edit
   end
 
   def create
@@ -18,12 +24,6 @@ class ItemsController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def show
-  end
-
-  def edit
   end
 
   def update

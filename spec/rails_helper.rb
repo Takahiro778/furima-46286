@@ -24,10 +24,9 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   # Rails 7.1 + RSpec のDBコネクション問題を解決する設定
-  config.around(:each) do |example|
+  config.around do |example|
     ActiveRecord::Base.connection_pool.with_connection do
       example.run
     end
   end
 end
-

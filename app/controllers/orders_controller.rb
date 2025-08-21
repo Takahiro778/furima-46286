@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
         @order_shipping_address.save
         redirect_to root_path
       rescue Payjp::CardError
-        @order_shipping_address.errors.add(:base, "カード情報の処理中にエラーが発生しました。入力内容をご確認ください。")
+        @order_shipping_address.errors.add(:base, 'カード情報の処理中にエラーが発生しました。入力内容をご確認ください。')
         render :index, status: :unprocessable_entity
       end
     else
@@ -28,7 +28,7 @@ class OrdersController < ApplicationController
   private
 
   def set_payjp_key
-    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+    gon.public_key = ENV.fetch('PAYJP_PUBLIC_KEY', nil)
   end
 
   def set_item
@@ -47,8 +47,8 @@ class OrdersController < ApplicationController
 
   def pay_item
     Payjp::Charge.create(
-      amount:   @item.price,
-      card:     order_shipping_address_params[:token],  # Strong Parameters を通した安全なトークンを使用
+      amount: @item.price,
+      card: order_shipping_address_params[:token], # Strong Parameters を通した安全なトークンを使用
       currency: 'jpy'
     )
   end

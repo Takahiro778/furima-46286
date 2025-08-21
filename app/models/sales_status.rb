@@ -9,5 +9,5 @@ class SalesStatus < ActiveHash::Base
     { id: 7, name: '全体的に状態が悪い' }
   ]
   include ActiveHash::Associations
-  has_many :items
+  has_many :items # rubocop:disable Rails/HasManyOrHasOneDependent
 end
