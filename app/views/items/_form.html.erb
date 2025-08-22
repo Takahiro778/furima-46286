@@ -1,8 +1,8 @@
 <%= form_with model: item, local: true do |f| %>
-  <%# エラー %>
+  <!-- エラー表示 -->
   <%= render "shared/error_messages", model: f.object %>
 
-  <%# 商品画像 %>
+  <!-- 商品画像 -->
   <div class="img-upload">
     <div class="weight-bold-text">
       商品画像 <span class="indispensable">必須</span>
@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <%# 商品名と商品説明 %>
+  <!-- 商品名・説明 -->
   <div class="new-items">
     <div class="weight-bold-text">
       商品名 <span class="indispensable">必須</span>
@@ -31,25 +31,29 @@
     </div>
   </div>
 
-  <%# 商品の詳細 %>
+  <!-- 商品の詳細 -->
   <div class="items-detail">
     <div class="weight-bold-text">商品の詳細</div>
     <div class="form">
       <div class="weight-bold-text">
         カテゴリー <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :category_id, Category.all, :id, :name, {prompt: "---"},
+      <%= f.collection_select :category_id,
+            Category.where.not(id: 1), :id, :name,
+            { prompt: '---' },
             { class: "select-box", id: "item-category" } %>
 
       <div class="weight-bold-text">
         商品の状態 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :sales_status_id, SalesStatus.all, :id, :name, {prompt: "---"},
+      <%= f.collection_select :sales_status_id,
+            SalesStatus.where.not(id: 1), :id, :name,
+            { prompt: '---' },
             { class: "select-box", id: "item-sales-status" } %>
     </div>
   </div>
 
-  <%# 配送について %>
+  <!-- 配送について -->
   <div class="items-detail">
     <div class="weight-bold-text question-text">
       <span>配送について</span>
@@ -59,24 +63,30 @@
       <div class="weight-bold-text">
         配送料の負担 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :shipping_fee_status_id, ShippingFeeStatus.all, :id, :name, {prompt: "---"},
+      <%= f.collection_select :shipping_fee_status_id,
+            ShippingFeeStatus.where.not(id: 1), :id, :name,
+            { prompt: '---' },
             { class: "select-box", id: "item-shipping-fee-status" } %>
 
       <div class="weight-bold-text">
         発送元の地域 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :prefecture_id, Prefecture.all, :id, :name, {prompt: "---"},
+      <%= f.collection_select :prefecture_id,
+            Prefecture.where.not(id: 1), :id, :name,
+            { prompt: '---' },
             { class: "select-box", id: "item-prefecture" } %>
 
       <div class="weight-bold-text">
         発送までの日数 <span class="indispensable">必須</span>
       </div>
-      <%= f.collection_select :scheduled_delivery_id, ScheduledDelivery.all, :id, :name, {prompt: "---"},
+      <%= f.collection_select :scheduled_delivery_id,
+            ScheduledDelivery.where.not(id: 1), :id, :name,
+            { prompt: '---' },
             { class: "select-box", id: "item-scheduled-delivery" } %>
     </div>
   </div>
 
-  <%# 販売価格 %>
+  <!-- 販売価格 -->
   <div class="sell-price">
     <div class="weight-bold-text question-text">
       <span>販売価格<br>(¥300〜9,999,999)</span>
@@ -102,14 +112,14 @@
     </div>
   </div>
 
-  <%# 注意書き %>
+  <!-- 注意書き -->
   <div class="caution">
     <p class="sentence"><a href="#">禁止されている出品、</a><a href="#">行為</a>を必ずご確認ください。</p>
     <p class="sentence">またブランド品でシリアルナンバー等がある場合はご記載ください。<a href="#">偽ブランドの販売</a>は犯罪であり処罰される可能性があります。</p>
     <p class="sentence">また、出品をもちまして<a href="#">加盟店規約</a>に同意したことになります。</p>
   </div>
 
-  <%# ボタン %>
+  <!-- ボタン -->
   <div class="sell-btn-contents">
     <%= f.submit(item.persisted? ? "変更する" : "出品する", class: "sell-btn") %>
     <%= link_to "もどる", (item.persisted? ? item_path(item) : root_path), class: "back-btn" %>
