@@ -14,14 +14,11 @@ set :rbenv_ruby, '3.2.0'
 set :rbenv_path, '/home/ec2-user/.rbenv'
 append :rbenv_map_bins, 'rake', 'gem', 'bundle', 'ruby', 'rails'
 
-# Bundler（ネイティブ拡張をサーバでビルド）
+# Bundler 環境変数
+# ※ nokogiri は同梱バイナリ/同梱libxml2を使わせるため、system-libraries を強制しない
+#    （BUNDLE_FORCE_RUBY_PLATFORM / NOKOGIRI_USE_SYSTEM_LIBRARIES / BUNDLE_BUILD__NOKOGIRI は置かない）
 set :bundle_env_variables, {
-  # Nokogiri は事前ビルド版を使わず、サーバでビルド
-  'BUNDLE_FORCE_RUBY_PLATFORM' => 'true',
-  'NOKOGIRI_USE_SYSTEM_LIBRARIES' => '1',
-  'BUNDLE_BUILD__NOKOGIRI' => '--use-system-libraries',
-
-  # mysql2 のビルド先などを明示
+  # mysql2 のビルド設定は残す
   'BUNDLE_BUILD__MYSQL2' => '--with-mysql-config=/usr/bin/mysql_config --with-openssl-lib=/usr/lib64 --with-openssl-include=/usr/include'
 }
 
@@ -29,7 +26,7 @@ set :bundle_env_variables, {
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/master.key')
 set :linked_dirs,  fetch(:linked_dirs,  []).push(
   'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets',
-  'vendor/bundle', 'public/system', 'public/uploads'
+  'vendor/bundle', 'public/system', 'public/uploads', 'public/assets'
 )
 
 # SSH
