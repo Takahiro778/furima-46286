@@ -45,11 +45,17 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ]
-  gem 'rspec-rails'
-  gem 'factory_bot_rails'
-  gem 'faker'
+  gem "debug", platforms: %i[mri windows]
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
+
+  # 自動デプロイ（Capistrano）
+  gem "capistrano"
+  gem "capistrano-rbenv"
+  gem "capistrano-bundler"
+  gem "capistrano-rails"
+  gem "capistrano3-unicorn"
 end
 
 group :development do
@@ -67,7 +73,8 @@ group :test do
 end
 
 group :production do
-  gem 'pg'
+  # gem 'pg'   # ← 今回は使わないので外す/コメント
+  gem 'unicorn', '6.1.0'
 end
 
 gem 'devise'
