@@ -14,11 +14,14 @@ set :rbenv_ruby, '3.2.0'
 set :rbenv_path, '/home/ec2-user/.rbenv'
 append :rbenv_map_bins, 'rake', 'gem', 'bundle', 'ruby', 'rails'
 
+# 既存の deploy.rb の該当部分だけ差し替え/追記
+
 # Bundler 環境変数
-# ※ nokogiri は同梱バイナリ/同梱libxml2を使わせるため、system-libraries を強制しない
-#    （BUNDLE_FORCE_RUBY_PLATFORM / NOKOGIRI_USE_SYSTEM_LIBRARIES / BUNDLE_BUILD__NOKOGIRI は置かない）
 set :bundle_env_variables, {
-  # mysql2 のビルド設定は残す
+  # これでバイナリ版ではなく ruby プラットフォームでビルドさせる
+  'BUNDLE_FORCE_RUBY_PLATFORM' => 'true',
+
+  # mysql2 のビルド設定はそのまま
   'BUNDLE_BUILD__MYSQL2' => '--with-mysql-config=/usr/bin/mysql_config --with-openssl-lib=/usr/lib64 --with-openssl-include=/usr/include'
 }
 
